@@ -633,3 +633,12 @@ function sideLabel_(e) {
   if (e.Kind === 'SLIP') return ({ CARD: 'Card', CASH: 'Cash', EFT: 'EFT main acc', OWN: 'Own card' })[e.Side] || '';
   return e.Side === 'BANK' ? 'Bank' : 'Cash box';
 }
+
+
+/** Run once from the editor to grant every permission the web app needs (Sheets, Drive, Docs). Changes nothing. */
+function authorizeAll() {
+  SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SHEET_ID')).getName();
+  DriveApp.getRootFolder().getName();
+  DocumentApp.getActiveDocument;
+  Logger.log('All permissions granted.');
+}
