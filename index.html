@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f2a37">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<title>PCash Vs IP – Stations</title>
+<style>
+  :root{--bg:#f3f4f6;--card:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;--brand:#1f2a37;--acc:#2563eb;--ok:#15803d;--bad:#b91c1c;--warn:#b45309;--pc:#7c3aed;--cf:#0e7490}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 8px) 8px 8px}
+  header button{background:none;border:0;color:#fff;font-size:28px;width:48px;height:40px}
+  #mLabel{font-weight:700;font-size:18px;text-align:center}
+  #mLabel small{display:block;font-weight:400;font-size:11px;opacity:.7;letter-spacing:.06em}
+  main{padding:12px 12px 96px;max-width:640px;margin:0 auto}
+  section{display:none}
+  section.on{display:block}
+  .card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  h2{font-size:17px;margin:0 0 10px}
+  h3{font-size:14px;margin:14px 0 6px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+  .big{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+  .btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:600;background:var(--acc);color:#fff;text-align:center}
+  .btn.alt{background:#e5e7eb;color:var(--ink)}
+  .btn.dark{background:var(--brand)}
+  .btn.red{background:var(--bad)}
+  .btn.sm{padding:9px 12px;font-size:15px;display:inline-block;width:auto}
+  .btn:disabled{opacity:.5}
+  .row{display:flex;gap:10px}
+  .row>*{flex:1}
+  .hero{font-size:46px;line-height:1.1;margin:14px 0}
+  .diff{text-align:center}
+  .diff .lab{color:var(--mute);font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  .diff .val{font-size:34px;font-weight:800;margin:2px 0}
+  .ok{color:var(--ok)} .bad{color:var(--bad)} .warn{color:var(--warn)} .mute{color:var(--mute)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat{background:#f9fafb;border-radius:10px;padding:8px}
+  .stat b{display:block;font-size:16px}
+  .stat span{font-size:12px;color:var(--mute)}
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
+  input[type=text],input[type=date],input[type=month],input[type=password],select,textarea{width:100%;font-size:18px;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#fff;color:var(--ink)}
+  textarea{font-size:13px;font-family:ui-monospace,monospace;height:140px}
+  .money{font-size:24px!important;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips button{border:2px solid #d1d5db;background:#fff;border-radius:999px;padding:10px 16px;font-size:16px;font-weight:600;color:var(--ink)}
+  .chips button.on{border-color:var(--acc);background:#dbeafe;color:#1e3a8a}
+  .chips.big button{flex:1;padding:14px 8px;font-size:18px;border-radius:12px}
+  .inl{display:flex;gap:8px;align-items:center}
+  .inl>input{flex:1}
+  .toggle{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:16px}
+  .toggle input{width:24px;height:24px}
+  .list .it{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  .list .it:last-child{border-bottom:0}
+  .it .d{width:44px;text-align:center;font-size:12px;color:var(--mute)}
+  .it .d b{display:block;font-size:18px;color:var(--ink)}
+  .it .m{flex:1;min-width:0}
+  .it .m .n{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it .m .s{font-size:12px;color:var(--mute)}
+  .it .a{font-weight:700;text-align:right;white-space:nowrap}
+  .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-right:4px;background:#eef2ff;color:#3730a3}
+  .tag.pc{background:#ede9fe;color:var(--pc)} .tag.cf{background:#cffafe;color:var(--cf)} .tag.w{background:#fef3c7;color:var(--warn)} .tag.v{background:#fee2e2;color:var(--bad)}
+  .thumb{display:flex;gap:12px;align-items:center}
+  .thumb img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#f9fafb}
+  .thumb .none{width:84px;height:84px;border-radius:10px;border:2px dashed #d1d5db;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px;text-align:center}
+  #cropWrap{background:#111;border-radius:12px;overflow:hidden;touch-action:none}
+  #cropCv{display:block;width:100%;touch-action:none}
+  .tbl{width:100%;border-collapse:collapse;font-size:15px}
+  .tbl td{padding:7px 0;border-bottom:1px solid var(--line)}
+  .tbl td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  .tbl tr.tot td{border-top:2px solid var(--ink);font-weight:800}
+  .chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .chk input{width:26px;height:26px}
+  .chk .m{flex:1}
+  .note{font-size:13px;color:var(--mute);margin-top:8px}
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#fff;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+  nav button{flex:1;border:0;background:none;padding:10px 0 12px;font-size:12px;color:var(--mute);font-weight:600}
+  nav button i{display:block;font-style:normal;font-size:22px}
+  nav button.on{color:var(--acc)}
+  nav .badge{background:var(--bad);color:#fff;border-radius:999px;font-size:10px;padding:1px 5px;margin-left:2px}
+  #busy{position:fixed;inset:0;background:rgba(17,24,39,.55);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-weight:600}
+  #busy.on{display:flex}
+  .spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite;margin-bottom:12px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  #toast{position:fixed;left:12px;right:12px;bottom:84px;z-index:30;background:#111827;color:#fff;border-radius:12px;padding:14px;font-weight:600;display:none;text-align:center}
+  #toast.on{display:block}
+  #toast.err{background:var(--bad)}
+  .lockbox{max-width:360px;margin:40px auto;text-align:center}
+  .lockbox input{text-align:center;font-size:30px;letter-spacing:.3em}
+  a{color:var(--acc)}
+  #stBar{background:#fff;border-bottom:1px solid var(--line);padding:8px 12px}
+  #stBar .in{max-width:640px;margin:0 auto;display:flex;gap:8px;align-items:center}
+  #stBar span{font-size:13px;color:var(--mute);white-space:nowrap}
+  #stBar select{padding:8px 10px;font-size:16px;font-weight:600}
+  .split2 select{font-size:16px;padding:10px}
+</style>
+</head>
+<body>
+<header>
+  <button id="mPrev" aria-label="Previous month">‹</button>
+  <div id="mLabel">PCash Vs IP</div>
+  <button id="mNext" aria-label="Next month">›</button>
+</header>
+<div id="stBar" hidden><div class="in"><span>Station</span><select id="stPick" aria-label="Station"></select></div></div>
+
+<main>
+  <!-- LOCK -->
+  <section id="v-lock">
+    <div class="card lockbox">
+      <h2>PCash Vs IP</h2>
+      <p class="mute">MRS petty cash · Head Office and stations</p>
+      <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" placeholder="Your PIN">
+      <div style="height:12px"></div>
+      <button class="btn" id="pinGo">Unlock</button>
+      <p class="note" id="apiWarn"></p>
+    </div>
+  </section>
+
+  <!-- HOME -->
+  <section id="v-home">
+    <div class="big">
+      <button class="btn" id="hSnap">📷 Snap slip</button>
+      <button class="btn alt" id="hGallery">🖼 Gallery</button>
+    </div>
+    <div class="row" style="margin:10px 0 12px">
+      <button class="btn dark" id="hIn">＋ Money in</button>
+      <button class="btn dark" id="hOut">− Cash out</button>
+    </div>
+    <div class="card diff" id="hDiff"></div>
+    <div class="card"><div class="grid" id="hStats"></div></div>
+    <div class="card"><h2 id="hListTitle">This month</h2><div class="list" id="hList"></div><div class="note" id="hCarry"></div></div>
+  </section>
+
+  <!-- CROP -->
+  <section id="v-crop">
+    <div id="cropWrap"><canvas id="cropCv"></canvas></div>
+    <p class="note">Drag the 4 corners onto the slip's corners.</p>
+    <div class="row" style="margin:8px 0">
+      <button class="btn alt sm" id="cRot">↻ Rotate</button>
+      <button class="btn alt sm" id="cAuto">Auto</button>
+      <button class="btn alt sm" id="cFull">Full</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="cEnh" checked> Sharpen contrast (faded slips)</label>
+    <div class="row" style="margin-top:14px">
+      <button class="btn alt" id="cCancel">Cancel</button>
+      <button class="btn" id="cUse">Use photo ✓</button>
+    </div>
+  </section>
+
+  <!-- SLIP FORM -->
+  <section id="v-slip">
+    <div class="card">
+      <div class="thumb">
+        <div id="sThumb"></div>
+        <div style="flex:1">
+          <div class="row"><button class="btn alt sm" id="sRetake">📷 Retake</button><button class="btn alt sm" id="sGal">🖼</button></div>
+          <div class="note" id="sThumbNote"></div>
+        </div>
+      </div>
+
+      <label>Goes to</label>
+      <div class="chips big" data-name="alloc" id="sAllocChips"></div>
+
+      <div id="sOne">
+        <label>Amount (slip total, incl. VAT)</label>
+        <input id="sAmount" class="money" type="text" inputmode="decimal" placeholder="0.00">
+      </div>
+      <div id="sTwo" hidden>
+        <label>Slip total (incl. VAT)</label>
+        <input id="sTotal" class="money" type="text" inputmode="decimal" placeholder="0.00">
+        <div class="split2">
+          <div><label>Part 1</label><select id="sCatA"></select></div>
+          <div><label>Part 2 (the rest)</label><select id="sCatB"></select></div>
+        </div>
+        <div class="split2">
+          <div><label id="sPcLab">Part 1 amount</label><input id="sPc" class="money" type="text" inputmode="decimal" placeholder="0.00"></div>
+          <div><label id="sCfLab">Part 2 amount</label><input id="sCf" class="money" type="text" readonly placeholder="0.00"></div>
+        </div>
+      </div>
+
+      <label class="toggle"><input type="checkbox" id="sVatOn"> VAT on this slip</label>
+      <div id="sVatOne" hidden>
+        <label>VAT amount</label>
+        <div class="inl"><input id="sVat" type="text" inputmode="decimal" placeholder="0.00"><button class="btn alt sm" data-vat="sVat:sAmount">15%</button></div>
+      </div>
+      <div id="sVatTwo" hidden class="split2">
+        <div><label id="sVatPcLab">VAT on part 1</label><div class="inl"><input id="sVatPc" type="text" inputmode="decimal" placeholder="0.00"><button class="btn alt sm" data-vat="sVatPc:sPc">15%</button></div></div>
+        <div><label id="sVatCfLab">VAT on part 2</label><div class="inl"><input id="sVatCf" type="text" inputmode="decimal" placeholder="0.00"><button class="btn alt sm" data-vat="sVatCf:sCf">15%</button></div></div>
+      </div>
+
+      <label>Paid by</label>
+      <div class="chips" data-name="side">
+        <button data-v="CARD">Card</button><button data-v="CASH">Cash</button><button data-v="OWN">Own card</button><button data-v="EFT">EFT (main acc)</button>
+      </div>
+
+      <div class="split2">
+        <div><label>Date</label><input id="sDate" type="date"></div>
+        <div><label>Vendor</label><input id="sVendor" type="text" list="vendorList" autocomplete="off" placeholder="Spar"></div>
+      </div>
+      <datalist id="vendorList"></datalist>
+      <label>Note (optional)</label>
+      <input id="sNote" type="text" placeholder="e.g. bought by Den">
+      <div style="height:16px"></div>
+      <div class="row">
+        <button class="btn alt" id="sCancel">Cancel</button>
+        <button class="btn" id="sSave">Save slip</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONEY IN / CASH OUT -->
+  <section id="v-move">
+    <div class="card">
+      <h2 id="mvTitle">Money in</h2>
+      <label>Type</label>
+      <div class="chips" data-name="mtype" id="mvTypes"></div>
+
+      <div id="mvDirBox" hidden>
+        <label>Which way</label>
+        <div class="chips" data-name="mdir">
+          <button data-v="EFT_IN">EFT in → cash out of box</button>
+          <button data-v="CASH_IN">Cash into box → EFT out</button>
+        </div>
+      </div>
+      <div id="mvSideBox">
+        <label id="mvSideLab">Landed in</label>
+        <div class="chips" data-name="mside">
+          <button data-v="CASH">Cash box</button><button data-v="BANK">Bank (PC account)</button>
+        </div>
+      </div>
+      <div id="mvLinkBox" hidden>
+        <label id="mvLinkLab">For</label>
+        <select id="mvLink"></select>
+      </div>
+      <div id="mvAllocBox" hidden>
+        <label>Goes to (optional)</label>
+        <div class="chips" data-name="malloc" id="mvAllocChips"></div>
+      </div>
+
+      <div id="mvSwipeBox" hidden>
+        <label>Card machine swipes (NC) for this form</label>
+        <input id="mvSwipes" class="money" type="text" inputmode="decimal" placeholder="0.00">
+      </div>
+      <label id="mvAmountLab">Amount</label>
+      <input id="mvAmount" class="money" type="text" inputmode="decimal" placeholder="0.00">
+      <div class="split2">
+        <div><label>Date</label><input id="mvDate" type="date"></div>
+        <div><label id="mvNameLab">From / who</label><input id="mvName" type="text" list="nameList" autocomplete="off"></div>
+      </div>
+      <datalist id="nameList"></datalist>
+      <label>Note (optional)</label>
+      <input id="mvNote" type="text">
+
+      <label>Proof (optional – POP, slip)</label>
+      <div class="thumb">
+        <div id="mvThumb"></div>
+        <div class="row"><button class="btn alt sm" id="mvSnap">📷 Snap</button><button class="btn alt sm" id="mvGal">🖼</button><button class="btn alt sm" id="mvClear">✕</button></div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="row">
+        <button class="btn alt" id="mvCancel">Cancel</button>
+        <button class="btn" id="mvSave">Save</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONTH -->
+  <section id="v-month">
+    <div class="card">
+      <h2>Balances</h2>
+      <div class="split2">
+        <div><label>Opening bank</label><input id="moOB" type="text" inputmode="decimal"></div>
+        <div><label>Opening cash on hand</label><input id="moOC" type="text" inputmode="decimal"></div>
+        <div><label>Statement closing</label><input id="moSC" type="text" inputmode="decimal"></div>
+        <div><label>Cash count (month-end)</label><input id="moCC" type="text" inputmode="decimal"></div>
+      </div>
+      <p class="note" id="moHint"></p>
+      <button class="btn" id="moSave">Save balances</button>
+    </div>
+    <div class="card"><h2>Reconciliation</h2><table class="tbl" id="moTbl"></table></div>
+    <div class="card">
+      <h2>Statement check</h2>
+      <p class="note" style="margin-top:0">Tick every bank line you can see on this month's statement. Card slips that only show on next month's statement: leave unticked, then move them.</p>
+      <div id="moChk"></div>
+      <div style="height:10px"></div>
+      <button class="btn dark" id="moMove">Move unticked to next month</button>
+    </div>
+    <div class="card">
+      <h2>Cash &amp; other slips</h2>
+      <p class="note" style="margin-top:0">Not on the bank statement: cash box, own card and EFT from the main account. Tick anything that belongs to next month, then move it. Split slips move together.</p>
+      <div id="moCash"></div>
+      <div style="height:10px"></div>
+      <button class="btn dark" id="moCashMove">Move ticked to next month</button>
+    </div>
+    <div class="card">
+      <h2>Month-end</h2>
+      <button class="btn" id="moCopy">Copy for Excel</button>
+      <div style="height:10px"></div>
+      <button class="btn dark" id="moPdf">Build slips PDF</button>
+      <p class="note" id="moPdfLink"></p>
+      <textarea id="moOut" hidden readonly></textarea>
+    </div>
+    <div class="card" id="pkCard">
+      <h2>Month-end pack (finance Excel)</h2>
+      <p class="note" style="margin-top:0">Count the cash box by note and coin, save it, then build this month's MRS petty cash form – filled in, in voucher order, ready to check and sign.</p>
+      <table class="tbl" id="pkCount"></table>
+      <div style="height:8px"></div>
+      <button class="btn alt" id="pkSaveCount">Save count as month-end cash</button>
+      <div style="height:14px"></div>
+      <div id="pkCheck"></div>
+      <div style="height:10px"></div>
+      <button class="btn dark" id="pkBuild">Build Excel pack</button>
+      <div style="height:8px"></div>
+      <button class="btn alt" id="pkShare" hidden>Share the Excel file</button>
+      <p class="note" id="pkMsg"></p>
+    </div>
+  </section>
+
+  <!-- OPEN ITEMS -->
+  <section id="v-open">
+    <div class="card"><h2>Staff withdrawals not repaid</h2><div class="list" id="opW"></div></div>
+    <div class="card"><h2>Own card – not reimbursed</h2><div class="list" id="opO"></div></div>
+  </section>
+
+  <!-- EDIT -->
+  <section id="v-edit">
+    <div class="card">
+      <h2 id="edTitle">Edit</h2>
+      <div id="edBody"></div>
+      <div style="height:16px"></div>
+      <div class="row">
+        <button class="btn alt" id="edCancel">Back</button>
+        <button class="btn" id="edSave">Save</button>
+      </div>
+      <div style="height:12px"></div>
+      <button class="btn red" id="edVoid">Void this entry</button>
+      <p class="note">Voided entries stay in the sheet (audit trail) but stop counting.</p>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="v-settings">
+    <div class="card">
+      <h2>Settings</h2>
+      <p id="stWho" class="note" style="margin-top:0"></p>
+      <label>Apps Script /exec URL</label>
+      <input id="stApi" type="text" autocomplete="off">
+      <button class="btn alt sm" id="stApiSave" style="margin-top:8px">Save URL</button>
+      <label class="toggle"><input type="checkbox" id="stComma"> Excel uses decimal comma (1234,56)</label>
+      <label>Change your PIN</label>
+      <div class="inl"><input id="stPin" type="password" inputmode="numeric"><button class="btn alt sm" id="stPinGo">Change</button></div>
+      <div style="height:16px"></div>
+      <button class="btn alt" id="stReload">Reload data</button>
+      <div style="height:10px"></div>
+      <button class="btn red" id="stLock">Lock app on this phone</button>
+      <p class="note">PCash Vs IP Stations v2.0 · pilot build</p>
+    </div>
+  </section>
+</main>
+
+<nav id="tabs">
+  <button data-tab="home" class="on"><i>🏠</i>Home</button>
+  <button data-tab="month"><i>📊</i>Month</button>
+  <button data-tab="open"><i>⏳</i>Open<span id="opBadge"></span></button>
+  <button data-tab="settings"><i>⚙️</i>Settings</button>
+</nav>
+
+<input type="file" id="camIn" accept="image/*" capture="environment" hidden>
+<input type="file" id="galIn" accept="image/*" hidden>
+<div id="busy"><div class="spin"></div><div id="busyMsg">Working…</div></div>
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js" defer></script>
+<script src="pack.js"></script>
+<script src="fill.js"></script>
+
+<script>
+/* Paste your Apps Script web app /exec URL here before publishing. It can also be set in Settings. */
+const API_URL = 'PASTE_YOUR_EXEC_URL_HERE';
+
+// ==CORE START== (pure logic, no DOM – tested separately)
+const r2 = v => { const n = Math.round((Number(v) || 0) * 100) / 100; return Math.abs(n) < 0.005 ? 0 : n; };
+const num = v => { if (v === null || v === undefined || v === '') return 0; const n = Number(String(v).replace(/\s/g, '')); return isFinite(n) ? n : 0; };
+const parseMoney = s => { const t = String(s || '').replace(/\s/g, '').replace(',', '.'); if (t === '') return NaN; const n = Number(t); return isFinite(n) ? r2(n) : NaN; };
+const pad2 = n => String(n).padStart(2, '0');
+function todayISO() { const d = new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function addMonth(m, n) { let [y, mo] = m.split('-').map(Number); mo += n; while (mo > 12) { mo -= 12; y++; } while (mo < 1) { mo += 12; y--; } return y + '-' + pad2(mo); }
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function monthName(m) { const [y, mo] = m.split('-').map(Number); return MONTHS[mo - 1] + ' ' + y; }
+function vatFromIncl(a) { return r2(num(a) * 15 / 115); }
+const has = v => v !== undefined && v !== null && String(v).trim() !== '';
+
+const TYPE_LABEL = {
+  PURCHASE: 'Slip', KITCHEN_SALES: 'Kitchen sales', STORE_SALES: 'Store cash sales', CASH_EXCHANGE: 'Cash exchange',
+  REPAYMENT: 'Withdrawal repaid', TRANSFER: 'Transfer from main acc', OTHER_IN: 'Other in',
+  STAFF_WITHDRAWAL: 'Staff withdrawal', CASH_DRAW: 'Cash draw (repaid to main acc)', REIMBURSE: 'Own card reimbursed',
+  BANK_FEE: 'Bank fee', OTHER_OUT: 'Other out'
+};
+const SIDE_LABEL = { CARD: 'Card', CASH: 'Cash', OWN: 'Own card', EFT: 'EFT main acc', BANK: 'Bank' };
+
+/** How an entry moves the two pots. Negative = money out. */
+function effect(e) {
+  if (!e || e.Status === 'VOID') return { bank: 0, cash: 0 };
+  const a = num(e.Amount);
+  if (e.Kind === 'SLIP') {
+    if (e.Side === 'CARD') return { bank: -a, cash: 0 };
+    if (e.Side === 'CASH') return { bank: 0, cash: -a };
+    return { bank: 0, cash: 0 }; // EFT from main account, or own card (until reimbursed)
+  }
+  if (e.Kind === 'IN') {
+    if (e.Type === 'CASH_EXCHANGE') return e.Direction === 'CASH_IN' ? { bank: -a, cash: a } : { bank: a, cash: -a };
+    return e.Side === 'BANK' ? { bank: a, cash: 0 } : { bank: 0, cash: a };
+  }
+  if (e.Kind === 'OUT') return e.Side === 'BANK' ? { bank: -a, cash: 0 } : { bank: 0, cash: -a };
+  return { bank: 0, cash: 0 };
+}
+const isBankSide = e => effect(e).bank !== 0;
+const findMonth = (months, m) => (months || []).find(x => x.Month === m) || null;
+
+/** Opening balances: typed for this month, else last month's statement close / cash count. */
+function openingFor(months, m) {
+  const rec = findMonth(months, m), prev = findMonth(months, addMonth(m, -1));
+  const o = { openBank: null, openCash: null, bankFrom: '', cashFrom: '' };
+  if (rec && has(rec.OpenBank)) { o.openBank = num(rec.OpenBank); o.bankFrom = 'set'; }
+  else if (prev && has(prev.StmtClose)) { o.openBank = num(prev.StmtClose); o.bankFrom = 'prev'; }
+  if (rec && has(rec.OpenCash)) { o.openCash = num(rec.OpenCash); o.cashFrom = 'set'; }
+  else if (prev && has(prev.CashCount)) { o.openCash = num(prev.CashCount); o.cashFrom = 'prev'; }
+  return o;
+}
+
+function byDateVoucher(a, b) {
+  return (a.Date + String(a.Voucher || '').padStart(6, '0') + (a.Line || '')).localeCompare(b.Date + String(b.Voucher || '').padStart(6, '0') + (b.Line || ''));
+}
+
+function summary(entries, months, m) {
+  const rows = (entries || []).filter(e => e.ReconMonth === m && e.Status !== 'VOID').sort(byDateVoucher);
+  const s = { rows, pc: 0, cf: 0, vatPc: 0, vatCf: 0, bankIn: 0, bankOut: 0, cashIn: 0, cashOut: 0, slips: 0, byAlloc: {} };
+  const vs = new Set();
+  rows.forEach(e => {
+    const ef = effect(e);
+    if (ef.bank > 0) s.bankIn += ef.bank; else s.bankOut -= ef.bank;
+    if (ef.cash > 0) s.cashIn += ef.cash; else s.cashOut -= ef.cash;
+    if (e.Kind === 'SLIP') {
+      vs.add(e.Voucher);
+      if (e.Alloc === 'CF') { s.cf += num(e.Amount); s.vatCf += num(e.VAT); } else { s.pc += num(e.Amount); s.vatPc += num(e.VAT); }
+      const k = e.Alloc || 'Other', b = s.byAlloc[k] = s.byAlloc[k] || { amount: 0, vat: 0 };
+      b.amount = r2(b.amount + num(e.Amount)); b.vat = r2(b.vat + num(e.VAT));
+    }
+  });
+  ['pc', 'cf', 'vatPc', 'vatCf', 'bankIn', 'bankOut', 'cashIn', 'cashOut'].forEach(k => s[k] = r2(s[k]));
+  s.spent = r2(s.pc + s.cf); s.vat = r2(s.vatPc + s.vatCf);
+  s.slips = vs.size;
+  const op = openingFor(months, m), rec = findMonth(months, m);
+  s.open = op;
+  s.stmtClose = rec && has(rec.StmtClose) ? num(rec.StmtClose) : null;
+  s.cashCount = rec && has(rec.CashCount) ? num(rec.CashCount) : null;
+  s.expBank = op.openBank === null ? null : r2(op.openBank + s.bankIn - s.bankOut);
+  s.expCash = op.openCash === null ? null : r2(op.openCash + s.cashIn - s.cashOut);
+  s.bankDiff = (s.expBank === null || s.stmtClose === null) ? null : r2(s.expBank - s.stmtClose);
+  s.cashDiff = (s.expCash === null || s.cashCount === null) ? null : r2(s.expCash - s.cashCount);
+  s.diff = (s.bankDiff === null || s.cashDiff === null) ? null : r2(s.bankDiff + s.cashDiff);
+  // slips bought this month but counted in a later month (late card postings)
+  s.carriedOut = (entries || []).filter(e => e.Status !== 'VOID' && e.Date.slice(0, 7) === m && e.ReconMonth > m);
+  return s;
+}
+
+function openItems(entries) {
+  const live = (entries || []).filter(e => e.Status !== 'VOID');
+  const withdrawals = live.filter(e => e.Kind === 'OUT' && e.Type === 'STAFF_WITHDRAWAL').map(w => {
+    const paid = live.filter(x => x.Kind === 'IN' && x.Type === 'REPAYMENT' && x.LinkID === w.ID).reduce((t, x) => t + num(x.Amount), 0);
+    return { entry: w, paid: r2(paid), outstanding: r2(num(w.Amount) - paid) };
+  }).filter(o => o.outstanding > 0);
+  const byV = {};
+  live.filter(e => e.Kind === 'SLIP' && e.Side === 'OWN').forEach(e => {
+    const o = byV[e.Voucher] = byV[e.Voucher] || { voucher: e.Voucher, date: e.Date, name: e.Name, total: 0 };
+    o.total += num(e.Amount);
+  });
+  const own = Object.values(byV).map(o => {
+    const paid = live.filter(x => x.Kind === 'OUT' && x.Type === 'REIMBURSE' && x.LinkID === 'V' + o.voucher).reduce((t, x) => t + num(x.Amount), 0);
+    return Object.assign({}, o, { total: r2(o.total), paid: r2(paid), outstanding: r2(o.total - paid) });
+  }).filter(o => o.outstanding > 0);
+  return { withdrawals, own };
+}
+
+function fmtNum(v, comma) {
+  if (v === '' || v === null || v === undefined) return '';
+  const s = r2(v).toFixed(2);
+  return comma ? s.replace('.', ',') : s;
+}
+
+/** Is this the Head Office kitchen set-up (PC + Coke fund)? */
+const isPcCf = cats => (cats || []).length === 2 && cats.indexOf('PC') >= 0 && cats.indexOf('CF') >= 0;
+
+/** Tab-separated blocks to paste into the recon workbook. st = { name, cats } of the station. */
+function buildExport(entries, months, m, comma, st) {
+  st = st || { name: '', cats: ['PC', 'CF'] };
+  const pccf = isPcCf(st.cats);
+  const s = summary(entries, months, m);
+  const f = v => fmtNum(v, comma);
+  const t = x => String(x || '').replace(/[\t\r\n]+/g, ' ');
+  const out = [];
+  out.push(['PCash Vs IP', st.name, monthName(m)].filter(Boolean).join('\t'), '');
+  out.push('VOUCHER LIST');
+  out.push(['Voucher', 'Date', 'Supplier / name', pccf ? 'PC/CF' : 'Category', 'Cash exchange', 'Cost excl VAT', 'VAT', 'Cash total', 'Swipes total', 'PC/CF EFT purchases', 'Note'].join('\t'));
+  const tot = { cx: 0, cost: 0, vat: 0, cash: 0, swipe: 0, eft: 0 };
+  s.rows.filter(e => e.Kind === 'SLIP' || e.Kind === 'OUT' || (e.Kind === 'IN' && e.Type === 'CASH_EXCHANGE')).forEach(e => {
+    const a = num(e.Amount), v = num(e.VAT);
+    const c = { cx: '', cost: '', vat: '', cash: '', swipe: '', eft: '' };
+    let note = e.Note || '';
+    if (e.Kind === 'SLIP') {
+      c.cost = a - v; c.vat = v;
+      if (e.Side === 'CASH') c.cash = a; else if (e.Side === 'CARD') c.swipe = a; else if (e.Side === 'EFT') c.eft = a;
+      else note = ('Own card. ' + note).trim();
+      if (e.Date.slice(0, 7) !== m) note = ('Bought ' + e.Date + (e.Side === 'CARD' ? ', on this statement. ' : ', counted this month. ') + note).trim();
+    } else if (e.Kind === 'IN') {
+      if (e.Direction === 'CASH_IN') { c.swipe = a; note = ('Cash exchange: cash in, EFT out. ' + note).trim(); }
+      else { c.cx = a; note = ('Cash exchange: EFT in, cash out. ' + note).trim(); }
+    } else {
+      if (e.Side === 'BANK') { c.swipe = a; c.cost = a; }
+      else if (e.Type === 'REIMBURSE') c.cash = a;
+      else c.cx = a;
+      note = (TYPE_LABEL[e.Type] + (e.Type === 'REIMBURSE' && e.LinkID ? ' ' + e.LinkID : '') + '. ' + note).trim();
+    }
+    Object.keys(tot).forEach(k => { if (c[k] !== '') tot[k] += c[k]; });
+    out.push([e.Voucher ? 'V' + e.Voucher : '', e.Date, t(e.Name), e.Alloc || '', f(c.cx), f(c.cost), f(c.vat), f(c.cash), f(c.swipe), f(c.eft), t(note)].join('\t'));
+  });
+  out.push(['TOTAL', '', '', '', f(tot.cx), f(tot.cost), f(tot.vat), f(tot.cash), f(tot.swipe), f(tot.eft), ''].join('\t'));
+  out.push('', 'INCOME');
+  out.push(['Date', 'Type', 'From', 'Into bank', 'Into cash box', 'Note'].join('\t'));
+  s.rows.filter(e => e.Kind === 'IN').forEach(e => {
+    const ef = effect(e);
+    out.push([e.Date, TYPE_LABEL[e.Type], t(e.Name), ef.bank > 0 ? f(ef.bank) : '', ef.cash > 0 ? f(ef.cash) : '', t(e.Note)].join('\t'));
+  });
+  if (pccf) {
+    out.push('', 'PC / CF SPLIT');
+    out.push(['', 'Incl VAT', 'VAT'].join('\t'));
+    out.push(['PC', f(s.pc), f(s.vatPc)].join('\t'));
+    out.push(['CF (6300)', f(s.cf), f(s.vatCf)].join('\t'));
+  } else {
+    out.push('', 'CATEGORY SPLIT');
+    out.push(['', 'Incl VAT', 'VAT'].join('\t'));
+    const keys = (st.cats || []).filter(c => s.byAlloc[c]).concat(Object.keys(s.byAlloc).filter(k => (st.cats || []).indexOf(k) < 0));
+    keys.forEach(k => out.push([t(k), f(s.byAlloc[k].amount), f(s.byAlloc[k].vat)].join('\t')));
+    out.push(['Total', f(s.spent), f(s.vat)].join('\t'));
+  }
+  out.push('', 'STATION FUNDS RECONCILIATION');
+  const ob = s.open.openBank, oc = s.open.openCash;
+  const inc = s.bankIn + s.cashIn, exp = s.bankOut + s.cashOut;
+  const reconClose = (ob === null || oc === null) ? null : ob + oc + inc - exp;
+  const actual = (s.stmtClose === null || s.cashCount === null) ? null : s.stmtClose + s.cashCount;
+  out.push(['Opening bank balance', f(ob)].join('\t'));
+  out.push(['Opening cash on hand', f(oc)].join('\t'));
+  out.push(['Plus income', f(inc)].join('\t'));
+  out.push(['Less expenditure', f(exp)].join('\t'));
+  out.push(['Recon closing', f(reconClose)].join('\t'));
+  out.push(['Actual bank closing (statement)', f(s.stmtClose)].join('\t'));
+  out.push(['Cash count', f(s.cashCount)].join('\t'));
+  out.push(['Actual total', f(actual)].join('\t'));
+  out.push(['Difference', f(reconClose === null || actual === null ? null : reconClose - actual)].join('\t'));
+  return out.join('\n');
+}
+
+/* ---- image maths: perspective crop ---- */
+function solveLinear(A, b) {
+  const n = b.length, M = A.map((row, i) => row.concat([b[i]]));
+  for (let c = 0; c < n; c++) {
+    let p = c;
+    for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+    const tmp = M[c]; M[c] = M[p]; M[p] = tmp;
+    const d = M[c][c];
+    if (Math.abs(d) < 1e-12) return null;
+    for (let k = c; k <= n; k++) M[c][k] /= d;
+    for (let r = 0; r < n; r++) {
+      if (r === c) continue;
+      const fct = M[r][c];
+      if (fct) for (let k = c; k <= n; k++) M[r][k] -= fct * M[c][k];
+    }
+  }
+  return M.map(r => r[n]);
+}
+/** 3x3 homography (flat, 9 values) that maps from[i] -> to[i]. */
+function homography(from, to) {
+  const A = [], b = [];
+  for (let i = 0; i < 4; i++) {
+    const x = from[i][0], y = from[i][1], u = to[i][0], v = to[i][1];
+    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+    A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+  }
+  const h = solveLinear(A, b);
+  return h ? h.concat([1]) : null;
+}
+function applyH(H, x, y) { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; }
+function quadSize(q) { const d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]); return { w: Math.max(d(q[0], q[1]), d(q[3], q[2])), h: Math.max(d(q[0], q[3]), d(q[1], q[2])) }; }
+/** q = [TL, TR, BR, BL] in source pixels. Returns RGBA of the straightened ow x oh image. */
+function warpQuad(src, sw, sh, q, ow, oh) {
+  const H = homography([[0, 0], [ow - 1, 0], [ow - 1, oh - 1], [0, oh - 1]], q);
+  const out = new Uint8ClampedArray(ow * oh * 4);
+  if (!H) return out;
+  for (let y = 0; y < oh; y++) {
+    for (let x = 0; x < ow; x++) {
+      const w = H[6] * x + H[7] * y + H[8];
+      let sx = (H[0] * x + H[1] * y + H[2]) / w, sy = (H[3] * x + H[4] * y + H[5]) / w;
+      if (sx < 0) sx = 0; if (sy < 0) sy = 0; if (sx > sw - 1) sx = sw - 1; if (sy > sh - 1) sy = sh - 1;
+      const x0 = sx | 0, y0 = sy | 0, x1 = Math.min(x0 + 1, sw - 1), y1 = Math.min(y0 + 1, sh - 1), fx = sx - x0, fy = sy - y0;
+      const i00 = (y0 * sw + x0) * 4, i10 = (y0 * sw + x1) * 4, i01 = (y1 * sw + x0) * 4, i11 = (y1 * sw + x1) * 4, o = (y * ow + x) * 4;
+      for (let c = 0; c < 3; c++) {
+        const top = src[i00 + c] + (src[i10 + c] - src[i00 + c]) * fx;
+        const bot = src[i01 + c] + (src[i11 + c] - src[i01 + c]) * fx;
+        out[o + c] = top + (bot - top) * fy;
+      }
+      out[o + 3] = 255;
+    }
+  }
+  return out;
+}
+function toGray(data, w, h) { const g = new Uint8Array(w * h); for (let i = 0, j = 0; i < g.length; i++, j += 4) g[i] = (data[j] * 0.299 + data[j + 1] * 0.587 + data[j + 2] * 0.114) | 0; return g; }
+function otsu(g) {
+  const hist = new Array(256).fill(0); for (let i = 0; i < g.length; i++) hist[g[i]]++;
+  let sum = 0; for (let i = 0; i < 256; i++) sum += i * hist[i];
+  let sumB = 0, wB = 0, best = 0, th = 128;
+  for (let i = 0; i < 256; i++) {
+    wB += hist[i]; if (!wB) continue;
+    const wF = g.length - wB; if (!wF) break;
+    sumB += i * hist[i];
+    const mB = sumB / wB, mF = (sum - sumB) / wF, between = wB * wF * (mB - mF) * (mB - mF);
+    if (between > best) { best = between; th = i; }
+  }
+  return th;
+}
+/** Guess the slip's 4 corners: largest bright area on a darker background. Falls back to a small inset. */
+function guessCorners(g, w, h) {
+  const fallback = () => { const ix = w * 0.04, iy = h * 0.04; return [[ix, iy], [w - ix, iy], [w - ix, h - iy], [ix, h - iy]]; };
+  const th = otsu(g), n = w * h;
+  const label = new Uint8Array(n), stack = new Int32Array(n);
+  let best = null;
+  for (let s = 0; s < n; s++) {
+    if (label[s] || g[s] <= th) continue;
+    let sp = 0, count = 0; stack[sp++] = s; label[s] = 1;
+    let tl = [0, 0, Infinity], tr = [0, 0, -Infinity], br = [0, 0, -Infinity], bl = [0, 0, Infinity];
+    let minx = w, maxx = 0, miny = h, maxy = 0;
+    while (sp) {
+      const p = stack[--sp], x = p % w, y = (p / w) | 0; count++;
+      const a = x + y, b = x - y;
+      if (a < tl[2]) tl = [x, y, a]; if (a > br[2]) br = [x, y, a];
+      if (b > tr[2]) tr = [x, y, b]; if (b < bl[2]) bl = [x, y, b];
+      if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
+      if (x > 0 && !label[p - 1] && g[p - 1] > th) { label[p - 1] = 1; stack[sp++] = p - 1; }
+      if (x < w - 1 && !label[p + 1] && g[p + 1] > th) { label[p + 1] = 1; stack[sp++] = p + 1; }
+      if (y > 0 && !label[p - w] && g[p - w] > th) { label[p - w] = 1; stack[sp++] = p - w; }
+      if (y < h - 1 && !label[p + w] && g[p + w] > th) { label[p + w] = 1; stack[sp++] = p + w; }
+    }
+    if (!best || count > best.count) best = { count, tl, tr, br, bl, minx, maxx, miny, maxy };
+  }
+  if (!best || best.count < n * 0.06) return fallback();
+  const touches = (best.minx <= 1) + (best.maxx >= w - 2) + (best.miny <= 1) + (best.maxy >= h - 2);
+  if (touches >= 3 && best.count > n * 0.6) return fallback(); // background is the bright part
+  return [best.tl, best.tr, best.br, best.bl].map(p => [p[0] + 0.5, p[1] + 0.5]);
+}
+/** Stretch contrast on luminance (keeps pen colours). Faded thermal slips become readable. */
+function enhance(data) {
+  const hist = new Uint32Array(256), n = data.length / 4;
+  for (let j = 0; j < data.length; j += 4) hist[(data[j] * 0.299 + data[j + 1] * 0.587 + data[j + 2] * 0.114) | 0]++;
+  let lo = 0, hi = 255, acc = 0;
+  for (let i = 0; i < 256; i++) { acc += hist[i]; if (acc > n * 0.01) { lo = i; break; } }
+  acc = 0;
+  for (let i = 255; i >= 0; i--) { acc += hist[i]; if (acc > n * 0.03) { hi = i; break; } }
+  if (hi - lo < 30) return;
+  const sc = 255 / (hi - lo);
+  for (let j = 0; j < data.length; j += 4) for (let c = 0; c < 3; c++) data[j + c] = (data[j + c] - lo) * sc;
+}
+// ==CORE END==
+
+/* ================================================================ UI */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const R = v => {
+  if (v === null || v === undefined) return '–';
+  const n = r2(v), parts = Math.abs(n).toFixed(2).split('.');
+  return (n < 0 ? '−' : '') + 'R' + parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '.' + parts[1];
+};
+const store = {
+  get(k) { try { return localStorage.getItem('pcst.' + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('pcst.' + k, v); } catch (e) { } },
+  del(k) { try { localStorage.removeItem('pcst.' + k); } catch (e) { } }
+};
+
+const S = {
+  entries: [], months: [], month: todayISO().slice(0, 7), view: 'lock',
+  pin: store.get('pin') || '', api: store.get('api') || API_URL, comma: store.get('comma') === '1',
+  photo: '', photoFor: 'slip', move: 'IN', editId: null, warnNoPhoto: false,
+  user: null, stations: [], station: store.get('station') || ''
+};
+const curStation = () => S.stations.find(s => s.Code === S.station) || { Code: S.station, Name: S.station, Categories: ['PC', 'CF'] };
+const cats = () => curStation().Categories || [];
+const pcCf = () => isPcCf(cats());
+const catTag = c => c === 'PC' ? '<span class="tag pc">PC</span>' : c === 'CF' ? '<span class="tag cf">CF</span>' : c ? '<span class="tag">' + esc(c) + '</span>' : '';
+const catChips = list => list.map(c => '<button data-v="' + esc(c) + '">' + esc(c) + '</button>').join('');
+
+function busy(msg) { $('#busyMsg').textContent = msg || 'Working…'; $('#busy').classList.add('on'); }
+function unbusy() { $('#busy').classList.remove('on'); }
+let toastT;
+function toast(msg, err) {
+  const t = $('#toast'); t.textContent = msg; t.className = 'on' + (err ? ' err' : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.className = '', err ? 5000 : 2200);
+}
+
+async function api(action, payload) {
+  if (!/^https:\/\/script\.google\.com\//.test(S.api)) throw new Error('Set the Apps Script URL in Settings first');
+  let res;
+  try {
+    res = await fetch(S.api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({}, payload || {}, { action, pin: S.pin, station: S.station })) });
+  } catch (e) { throw new Error('No connection – nothing was saved. Check signal and try again.'); }
+  let j;
+  try { j = await res.json(); } catch (e) { throw new Error('Server reply not readable (check the /exec URL and deployment access "Anyone")'); }
+  if (!j.ok) throw new Error(j.error || 'Server error');
+  return j.data;
+}
+
+async function loadAll(msg) {
+  busy(msg || 'Loading');
+  try {
+    let d;
+    try { d = await api('load'); }
+    catch (e) {
+      // a remembered station this person may not open (e.g. another person used this phone before)
+      if (!/only open|Unknown station/.test(e.message) || !S.station) throw e;
+      S.station = ''; d = await api('load');
+    }
+    S.entries = d.entries || []; S.months = d.months || [];
+    S.user = d.user; S.stations = d.stations || []; S.station = d.station;
+    store.set('station', S.station);
+    renderStationBar();
+    return true;
+  } finally { unbusy(); }
+}
+
+/* ---------- station ---------- */
+function renderStationBar() {
+  const admin = S.user && S.user.station === 'ALL' && S.stations.length > 1;
+  $('#stBar').hidden = !admin || !S.pin;
+  if (admin) $('#stPick').innerHTML = S.stations.map(s => '<option value="' + esc(s.Code) + '"' + (s.Code === S.station ? ' selected' : '') + '>' + esc(s.Name) + '</option>').join('');
+  $('#sAllocChips').innerHTML = catChips(cats()) + (cats().length > 1 ? '<button data-v="SPLIT">Split</button>' : '');
+  $('#mvAllocChips').innerHTML = catChips(cats());
+  const opts = cats().map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
+  $('#sCatA').innerHTML = opts; $('#sCatB').innerHTML = opts;
+  if (cats().length > 1) { $('#sCatA').value = cats()[0]; $('#sCatB').value = cats()[1]; }
+  $('#pkCard').hidden = !pcCf();
+}
+$('#stPick').onchange = async () => {
+  const prev = S.station;
+  S.station = $('#stPick').value;
+  S.photo = ''; S.slipOpen = false;
+  try { await loadAll('Opening ' + curStation().Name); show('home'); }
+  catch (e) { toast(e.message, true); S.station = prev; renderStationBar(); }
+};
+
+/* ---------- navigation ---------- */
+function show(v) {
+  if (!S.pin && v !== 'lock' && v !== 'settings') v = 'lock';
+  S.view = v;
+  $$('main section').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
+  $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === v));
+  $('#tabs').style.display = (v === 'lock' || v === 'crop') ? 'none' : 'flex';
+  $('#stBar').hidden = v === 'lock' || v === 'crop' || !(S.user && S.user.station === 'ALL' && S.stations.length > 1);
+  const monthNav = (v === 'home' || v === 'month');
+  $('#mPrev').style.visibility = $('#mNext').style.visibility = monthNav ? 'visible' : 'hidden';
+  renderHeader();
+  if (v === 'home') renderHome();
+  if (v === 'month') renderMonth();
+  if (v === 'open') renderOpen();
+  if (v === 'settings') renderSettings();
+  if (v === 'lock') $('#apiWarn').innerHTML = /^https:\/\/script\.google\.com\//.test(S.api) ? '' : 'Setup: the Apps Script URL is not set yet – add it in <a href="#" id="goSet">Settings</a> first.';
+  window.scrollTo(0, 0);
+}
+function renderHeader() {
+  const titles = { lock: 'PCash Vs IP', crop: 'Crop photo', slip: 'New slip', move: S.move === 'IN' ? 'Money in' : 'Cash out', open: 'Open items', edit: 'Edit entry', settings: 'Settings' };
+  const sub = '<small>' + esc(S.user && S.station ? curStation().Name.toUpperCase() : 'PCASH VS IP') + '</small>';
+  if (S.view === 'home' || S.view === 'month') $('#mLabel').innerHTML = esc(monthName(S.month)) + sub;
+  else $('#mLabel').innerHTML = esc(titles[S.view] || 'PCash Vs IP') + sub;
+  const oi = openItems(S.entries), n = oi.withdrawals.length + oi.own.length;
+  $('#opBadge').innerHTML = n ? '<span class="badge">' + n + '</span>' : '';
+}
+$('#mPrev').onclick = () => { S.month = addMonth(S.month, -1); show(S.view); };
+$('#mNext').onclick = () => { S.month = addMonth(S.month, 1); show(S.view); };
+$$('#tabs button').forEach(b => b.onclick = () => show(b.dataset.tab));
+
+/* ---------- chips ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('.chips button');
+  if (!b) return;
+  const g = b.parentElement;
+  const was = b.classList.contains('on');
+  $$('.chips[data-name="' + g.dataset.name + '"] button').forEach(x => x.classList.remove('on'));
+  if (!(was && g.dataset.toggle === '1')) b.classList.add('on');
+  g.dispatchEvent(new Event('change'));
+});
+const chipVal = name => { const b = document.querySelector('.chips[data-name="' + name + '"] button.on'); return b ? b.dataset.v : ''; };
+function setChip(name, v) { $$('.chips[data-name="' + name + '"] button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); const g = document.querySelector('.chips[data-name="' + name + '"]'); if (g) g.dispatchEvent(new Event('change')); }
+
+/* ---------- lock ---------- */
+async function unlock() {
+  S.pin = $('#pinIn').value.trim();
+  if (!S.pin) return toast('Enter the PIN', true);
+  try { await loadAll('Unlocking'); store.set('pin', S.pin); $('#pinIn').value = ''; show('home'); }
+  catch (e) { toast(e.message, true); if (/PIN/.test(e.message)) S.pin = ''; }
+}
+$('#pinGo').onclick = unlock;
+$('#pinIn').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+/* ---------- home ---------- */
+function diffHTML(label, v, waitText) {
+  if (v === null) return '<div class="lab">' + label + '</div><div class="val mute" style="font-size:20px">' + waitText + '</div>';
+  return '<div class="lab">' + label + '</div><div class="val ' + (v === 0 ? 'ok' : 'bad') + '">' + (v === 0 ? 'R0.00 ✓' : R(v)) + '</div>';
+}
+function entryLine(e) {
+  const ef = effect(e), a = num(e.Amount);
+  const signed = ef.bank + ef.cash;
+  let amtCls = '', amt = R(a);
+  if (e.Kind === 'IN' && e.Type !== 'CASH_EXCHANGE') { amtCls = 'ok'; amt = '+' + R(a); }
+  else if (e.Kind === 'IN') amt = '⇄ ' + R(a);
+  else if (signed < 0 || e.Kind === 'OUT') amt = '−' + R(a);
+  const tags = [];
+  if (e.Alloc) tags.push(catTag(e.Alloc));
+  if (e.Kind === 'SLIP' && e.Side === 'OWN') tags.push('<span class="tag w">Own card</span>');
+  if (e.Date.slice(0, 7) !== e.ReconMonth) tags.push('<span class="tag w">bought ' + esc(monthName(e.Date.slice(0, 7))) + '</span>');
+  if (!e.FileId && e.Kind === 'SLIP') tags.push('<span class="tag v">no photo</span>');
+  if (isBankSide(e) && e.OnStatement === 'Y') tags.push('<span class="tag">✓ stmt</span>');
+  const what = e.Kind === 'SLIP' ? SIDE_LABEL[e.Side] : TYPE_LABEL[e.Type] + (e.Kind !== 'SLIP' && e.Type !== 'CASH_EXCHANGE' ? ' · ' + (e.Side === 'BANK' ? 'Bank' : 'Cash box') : '');
+  const d = e.Date.split('-');
+  return '<div class="it" data-id="' + esc(e.ID) + '"><div class="d"><b>' + d[2] + '</b>' + MONTHS[Number(d[1]) - 1] + '</div>' +
+    '<div class="m"><div class="n">' + esc(e.Name || TYPE_LABEL[e.Type]) + '</div><div class="s">' + (e.Voucher ? 'V' + esc(e.Voucher) + (e.Line && e.Line !== '1' ? '.' + esc(e.Line) : '') + ' · ' : '') + esc(what) + '</div><div>' + tags.join('') + '</div></div>' +
+    '<div class="a ' + amtCls + '">' + amt + '</div></div>';
+}
+const topCat = s => Object.keys(s.byAlloc).sort((a, b) => s.byAlloc[b].amount - s.byAlloc[a].amount)[0] || '';
+function renderHome() {
+  const s = summary(S.entries, S.months, S.month);
+  const ready = s.diff !== null;
+  $('#hDiff').innerHTML = ready
+    ? diffHTML('Difference this month', s.diff) + '<div class="split2"><div>' + diffHTML('Bank', s.bankDiff) + '</div><div>' + diffHTML('Cash box', s.cashDiff) + '</div></div>'
+    : '<div class="lab">Expected now</div><div class="split2"><div><div class="mute" style="font-size:12px">Bank</div><b style="font-size:22px">' + R(s.expBank) + '</b></div><div><div class="mute" style="font-size:12px">Cash box</div><b style="font-size:22px">' + R(s.expCash) + '</b></div></div>' +
+      '<p class="note">' + (s.open.openBank === null || s.open.openCash === null ? 'Set opening balances under Month. ' : '') + 'Difference shows once the statement closing and cash count are in.</p>';
+  $('#hStats').innerHTML = [
+    ...(pcCf() ? [['PC', s.pc], ['CF', s.cf]] : [['Spent', s.spent], ['Top: ' + (topCat(s) || '–'), s.byAlloc[topCat(s)] ? s.byAlloc[topCat(s)].amount : 0]]), ['VAT', s.vat],
+    ['Bank in', s.bankIn], ['Bank out', s.bankOut], ['Slips', null, s.slips],
+    ['Cash in', s.cashIn], ['Cash out', s.cashOut], ['Entries', null, s.rows.length]
+  ].map(x => '<div class="stat"><b>' + (x[1] === null ? x[2] : R(x[1])) + '</b><span>' + x[0] + '</span></div>').join('');
+  const rows = s.rows.slice().reverse();
+  $('#hListTitle').textContent = 'Counted in ' + monthName(S.month) + ' (' + rows.length + ')';
+  $('#hList').innerHTML = rows.length ? rows.map(entryLine).join('') : '<p class="mute">Nothing captured yet. Snap the first slip.</p>';
+  $('#hCarry').textContent = s.carriedOut.length ? s.carriedOut.length + ' item(s) bought in ' + monthName(S.month) + ' count in a later month (not on this statement).' : '';
+}
+$('#hList').addEventListener('click', e => { const it = e.target.closest('.it'); if (it) openEdit(it.dataset.id); });
+
+/* ---------- camera + crop ---------- */
+const C = { src: null, q: null, drag: -1, k: 1 };
+function pickPhoto(forWhat, camera) { S.photoFor = forWhat; (camera ? $('#camIn') : $('#galIn')).click(); }
+['#camIn', '#galIn'].forEach(id => $(id).addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) loadPhoto(f); }));
+async function loadPhoto(file) {
+  busy('Opening photo');
+  try {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error('Could not open that photo')); img.src = url; });
+    const sc = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+    const cv = document.createElement('canvas');
+    cv.width = Math.round(img.naturalWidth * sc); cv.height = Math.round(img.naturalHeight * sc);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    URL.revokeObjectURL(url);
+    C.src = cv; autoCorners();
+    show('crop'); drawCrop();
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+}
+function autoCorners() {
+  const sw = C.src.width, sh = C.src.height, sc = Math.min(1, 320 / Math.max(sw, sh));
+  const w = Math.max(1, Math.round(sw * sc)), h = Math.max(1, Math.round(sh * sc));
+  const t = document.createElement('canvas'); t.width = w; t.height = h;
+  const x = t.getContext('2d'); x.drawImage(C.src, 0, 0, w, h);
+  const q = guessCorners(toGray(x.getImageData(0, 0, w, h).data, w, h), w, h);
+  C.q = q.map(p => [Math.min(sw, p[0] / sc), Math.min(sh, p[1] / sc)]);
+}
+function drawCrop() {
+  const cv = $('#cropCv'), wrap = $('#cropWrap');
+  const cssW = wrap.clientWidth || 360, maxH = window.innerHeight * 0.62;
+  let k = cssW / C.src.width; if (C.src.height * k > maxH) k = maxH / C.src.height;
+  C.k = k;
+  const dpr = window.devicePixelRatio || 1, w = C.src.width * k, h = C.src.height * k;
+  cv.style.width = w + 'px'; cv.style.height = h + 'px'; cv.style.margin = '0 auto';
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const x = cv.getContext('2d');
+  x.setTransform(dpr * k, 0, 0, dpr * k, 0, 0);
+  x.drawImage(C.src, 0, 0);
+  x.beginPath(); x.rect(0, 0, C.src.width, C.src.height);
+  x.moveTo(C.q[0][0], C.q[0][1]); for (let i = 3; i >= 1; i--) x.lineTo(C.q[i][0], C.q[i][1]); x.closePath();
+  x.fillStyle = 'rgba(0,0,0,.5)'; x.fill('evenodd');
+  x.beginPath(); C.q.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.closePath();
+  x.lineWidth = 3 / k; x.strokeStyle = '#38bdf8'; x.stroke();
+  C.q.forEach(p => { x.beginPath(); x.arc(p[0], p[1], 14 / k, 0, Math.PI * 2); x.fillStyle = 'rgba(56,189,248,.35)'; x.fill(); x.lineWidth = 3 / k; x.strokeStyle = '#fff'; x.stroke(); });
+}
+function cropPos(e) { const r = $('#cropCv').getBoundingClientRect(); return [(e.clientX - r.left) / C.k, (e.clientY - r.top) / C.k]; }
+$('#cropCv').addEventListener('pointerdown', e => {
+  const p = cropPos(e); let best = -1, bd = 48 / C.k;
+  C.q.forEach((c, i) => { const d = Math.hypot(c[0] - p[0], c[1] - p[1]); if (d < bd) { bd = d; best = i; } });
+  C.drag = best; if (best >= 0) e.target.setPointerCapture(e.pointerId);
+});
+$('#cropCv').addEventListener('pointermove', e => {
+  if (C.drag < 0) return;
+  const p = cropPos(e);
+  C.q[C.drag] = [Math.max(0, Math.min(C.src.width, p[0])), Math.max(0, Math.min(C.src.height, p[1]))];
+  drawCrop();
+});
+['pointerup', 'pointercancel'].forEach(t => $('#cropCv').addEventListener(t, () => C.drag = -1));
+$('#cRot').onclick = () => {
+  const s = C.src, cv = document.createElement('canvas'); cv.width = s.height; cv.height = s.width;
+  const x = cv.getContext('2d'); x.translate(cv.width, 0); x.rotate(Math.PI / 2); x.drawImage(s, 0, 0);
+  C.src = cv; autoCorners(); drawCrop();
+};
+$('#cAuto').onclick = () => { autoCorners(); drawCrop(); };
+$('#cFull').onclick = () => { const w = C.src.width, h = C.src.height; C.q = [[0, 0], [w, 0], [w, h], [0, h]]; drawCrop(); };
+$('#cCancel').onclick = () => show(S.photoFor === 'slip' ? (S.slipOpen ? 'slip' : 'home') : 'move');
+$('#cUse').onclick = () => {
+  busy('Straightening');
+  setTimeout(() => {
+    try {
+      const sz = quadSize(C.q), sc = Math.min(1, 1600 / Math.max(sz.w, sz.h));
+      const ow = Math.max(40, Math.round(sz.w * sc)), oh = Math.max(40, Math.round(sz.h * sc));
+      const sw = C.src.width, sh = C.src.height;
+      const out = warpQuad(C.src.getContext('2d').getImageData(0, 0, sw, sh).data, sw, sh, C.q, ow, oh);
+      if ($('#cEnh').checked) enhance(out);
+      const cv = document.createElement('canvas'); cv.width = ow; cv.height = oh;
+      cv.getContext('2d').putImageData(new ImageData(out, ow, oh), 0, 0);
+      S.photo = cv.toDataURL('image/jpeg', 0.8);
+      if (S.photoFor === 'slip') { if (!S.slipOpen) resetSlip(); S.slipOpen = true; renderSlipThumb(); show('slip'); }
+      else { renderMoveThumb(); show('move'); }
+    } catch (e) { toast('Could not crop: ' + e.message, true); }
+    finally { unbusy(); }
+  }, 30);
+};
+
+/* ---------- slip form ---------- */
+function recentNames(kind) {
+  const seen = new Map();
+  S.entries.slice().reverse().forEach(e => { if (e.Kind === kind && e.Name && !seen.has(e.Name.toLowerCase())) seen.set(e.Name.toLowerCase(), e.Name); });
+  return Array.from(seen.values()).slice(0, 40);
+}
+function resetSlip() {
+  ['#sAmount', '#sTotal', '#sPc', '#sCf', '#sVat', '#sVatPc', '#sVatCf', '#sVendor', '#sNote'].forEach(id => $(id).value = '');
+  $('#sVatOn').checked = false; $('#sDate').value = todayISO();
+  setChip('alloc', cats().length === 1 ? cats()[0] : ''); setChip('side', '');
+  if (cats().length > 1) { $('#sCatA').value = cats()[0]; $('#sCatB').value = cats()[1]; }
+  $('#vendorList').innerHTML = recentNames('SLIP').map(n => '<option value="' + esc(n) + '">').join('');
+  S.warnNoPhoto = false; syncSlip();
+}
+function renderSlipThumb() {
+  $('#sThumb').innerHTML = S.photo ? '<img src="' + S.photo + '" alt="slip">' : '<div class="none">no photo</div>';
+  $('#sThumbNote').textContent = S.photo ? 'Photo ready' : 'No photo yet';
+}
+function syncSlip() {
+  const split = chipVal('alloc') === 'SPLIT', vat = $('#sVatOn').checked;
+  $('#sOne').hidden = split; $('#sTwo').hidden = !split;
+  $('#sVatOne').hidden = !vat || split; $('#sVatTwo').hidden = !vat || !split;
+  const t = parseMoney($('#sTotal').value), p = parseMoney($('#sPc').value);
+  $('#sCf').value = (isFinite(t) && isFinite(p)) ? r2(t - p).toFixed(2) : '';
+  const a = $('#sCatA').value || 'part 1', b = $('#sCatB').value || 'part 2';
+  $('#sPcLab').textContent = a + ' part'; $('#sCfLab').textContent = b + ' part (the rest)';
+  $('#sVatPcLab').textContent = 'VAT on ' + a + ' part'; $('#sVatCfLab').textContent = 'VAT on ' + b + ' part';
+}
+['#sCatA', '#sCatB'].forEach(id => $(id).addEventListener('change', syncSlip));
+document.querySelector('.chips[data-name="alloc"]').addEventListener('change', syncSlip);
+['#sVatOn', '#sTotal', '#sPc'].forEach(id => $(id).addEventListener('input', syncSlip));
+$('#sVatOn').addEventListener('change', syncSlip);
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-vat]'); if (!b) return;
+  const [vatId, amtId] = b.dataset.vat.split(':'); const a = parseMoney($('#' + amtId).value);
+  if (!isFinite(a)) return toast('Enter the amount first', true);
+  $('#' + vatId).value = vatFromIncl(a).toFixed(2);
+});
+$('#sRetake').onclick = () => pickPhoto('slip', true);
+$('#sGal').onclick = () => pickPhoto('slip', false);
+$('#sCancel').onclick = () => { S.slipOpen = false; S.photo = ''; show('home'); };
+$('#sSave').onclick = async () => {
+  const alloc = chipVal('alloc'), side = chipVal('side'), vatOn = $('#sVatOn').checked;
+  if (!alloc) return toast(pcCf() ? 'Pick PC, CF or Split' : 'Pick what it was for', true);
+  let lines;
+  if (alloc === 'SPLIT') {
+    const ca = $('#sCatA').value, cb = $('#sCatB').value;
+    if (!ca || !cb || ca === cb) return toast('Split: pick two different categories', true);
+    const total = parseMoney($('#sTotal').value), pc = parseMoney($('#sPc').value), cf = r2(total - pc);
+    if (!(total > 0) || !(pc > 0) || !(cf > 0)) return toast('Split: enter the total and the ' + ca + ' part – ' + cb + ' is the rest', true);
+    lines = [{ alloc: ca, amount: pc, vat: vatOn ? (parseMoney($('#sVatPc').value) || 0) : 0 }, { alloc: cb, amount: cf, vat: vatOn ? (parseMoney($('#sVatCf').value) || 0) : 0 }];
+  } else {
+    const a = parseMoney($('#sAmount').value);
+    if (!(a > 0)) return toast('Enter the amount', true);
+    lines = [{ alloc, amount: a, vat: vatOn ? (parseMoney($('#sVat').value) || 0) : 0 }];
+  }
+  if (lines.some(l => l.vat < 0 || l.vat >= l.amount)) return toast('VAT must be less than the amount', true);
+  if (vatOn && lines.every(l => !l.vat)) return toast('VAT is switched on but empty – enter it or switch it off', true);
+  if (!side) return toast('Pick how it was paid', true);
+  const vendor = $('#sVendor').value.trim(); if (!vendor) return toast('Enter the vendor', true);
+  const date = $('#sDate').value || todayISO();
+  if (!S.photo && !S.warnNoPhoto) { S.warnNoPhoto = true; return toast('No photo attached – tap Save again to save without one', true); }
+  busy('Saving slip');
+  try {
+    const d = await api('saveSlip', { date, vendor, side, note: $('#sNote').value.trim(), image: S.photo ? S.photo.split(',')[1] : '', lines });
+    S.entries.push(...d.entries);
+    S.photo = ''; S.slipOpen = false;
+    S.month = d.entries[0].ReconMonth;
+    show('home');
+    toast('Saved V' + d.voucher + ' · ' + R(lines.reduce((t, l) => t + l.amount, 0)));
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+
+/* ---------- money in / cash out ---------- */
+const IN_TYPES = [['KITCHEN_SALES', 'Kitchen sales', 'CASH'], ['STORE_SALES', 'Store cash sales', 'CASH'], ['CASH_EXCHANGE', 'Cash exchange', 'BANK'], ['REPAYMENT', 'Withdrawal repaid', 'BANK'], ['TRANSFER', 'Transfer from main acc', 'BANK'], ['OTHER_IN', 'Other', 'CASH']];
+const OUT_TYPES = [['STAFF_WITHDRAWAL', 'Staff withdrawal', 'CASH'], ['CASH_DRAW', 'Cash draw (repaid to main acc)', 'CASH'], ['REIMBURSE', 'Own card reimbursed', 'CASH'], ['BANK_FEE', 'Bank fee', 'BANK'], ['OTHER_OUT', 'Other', 'CASH']];
+/** Kitchen sales only happen at the Head Office kitchen. */
+const inTypes = () => pcCf() ? IN_TYPES : IN_TYPES.filter(t => t[0] !== 'KITCHEN_SALES');
+function openMove(kind, preset) {
+  S.move = kind; S.photo = ''; S.photoFor = 'move';
+  const types = kind === 'IN' ? inTypes() : OUT_TYPES;
+  $('#mvTitle').textContent = kind === 'IN' ? 'Money in' : 'Cash out';
+  $('#mvTypes').innerHTML = types.map(t => '<button data-v="' + t[0] + '">' + esc(t[1]) + '</button>').join('');
+  ['#mvAmount', '#mvName', '#mvNote', '#mvSwipes'].forEach(id => $(id).value = '');
+  $('#mvDate').value = todayISO();
+  $('#nameList').innerHTML = recentNames(kind).map(n => '<option value="' + esc(n) + '">').join('');
+  setChip('mside', ''); setChip('mdir', 'EFT_IN'); setChip('malloc', '');
+  setChip('mtype', (preset && preset.type) || '');
+  if (preset) {
+    if (preset.amount) $('#mvAmount').value = r2(preset.amount).toFixed(2);
+    if (preset.name) $('#mvName').value = preset.name;
+    if (preset.link) $('#mvLink').value = preset.link;
+  }
+  renderMoveThumb();
+  show('move');
+}
+function syncMove() {
+  const type = chipVal('mtype'), list = S.move === 'IN' ? inTypes() : OUT_TYPES;
+  const def = (list.find(t => t[0] === type) || [])[2];
+  if (def && !chipVal('mside')) setChip('mside', def);
+  $('#mvDirBox').hidden = type !== 'CASH_EXCHANGE';
+  $('#mvSideBox').hidden = type === 'CASH_EXCHANGE';
+  $('#mvSideLab').textContent = S.move === 'IN' ? 'Landed in' : 'Paid out of';
+  $('#mvAllocBox').hidden = !(S.move === 'OUT' && (type === 'BANK_FEE' || type === 'OTHER_OUT'));
+  $('#mvSwipeBox').hidden = type !== 'KITCHEN_SALES';
+  $('#mvAmountLab').textContent = type === 'KITCHEN_SALES' ? 'Cash takings (0 if all swipes)' : 'Amount';
+  if (type === 'BANK_FEE' && !chipVal('malloc') && cats().indexOf('PC') >= 0) setChip('malloc', 'PC');
+  $('#mvNameLab').textContent = S.move === 'IN' ? 'From whom' : (type === 'CASH_DRAW' ? 'Who drew it' : 'Who / what');
+  const oi = openItems(S.entries);
+  if (type === 'REPAYMENT') {
+    $('#mvLinkBox').hidden = false; $('#mvLinkLab').textContent = 'For which withdrawal';
+    const cur = $('#mvLink').value;
+    $('#mvLink').innerHTML = '<option value="">– not linked –</option>' + oi.withdrawals.map(o => '<option value="' + esc(o.entry.ID) + '">' + esc(o.entry.Name || 'Staff') + ' · ' + esc(o.entry.Date) + ' · owes ' + R(o.outstanding) + '</option>').join('');
+    $('#mvLink').value = cur;
+  } else if (type === 'REIMBURSE') {
+    $('#mvLinkBox').hidden = false; $('#mvLinkLab').textContent = 'For which own-card slip';
+    const cur = $('#mvLink').value;
+    $('#mvLink').innerHTML = '<option value="">– pick the slip –</option>' + oi.own.map(o => '<option value="V' + esc(o.voucher) + '">V' + esc(o.voucher) + ' · ' + esc(o.name) + ' · ' + esc(o.date) + ' · ' + R(o.outstanding) + '</option>').join('');
+    $('#mvLink').value = cur;
+  } else { $('#mvLinkBox').hidden = true; $('#mvLink').innerHTML = ''; }
+}
+document.querySelector('.chips[data-name="mtype"]').addEventListener('change', () => { setChip('mside', ''); syncMove(); });
+$('#mvLink').addEventListener('change', () => {
+  const v = $('#mvLink').value, oi = openItems(S.entries);
+  const w = oi.withdrawals.find(o => o.entry.ID === v); if (w) { $('#mvAmount').value = w.outstanding.toFixed(2); $('#mvName').value = w.entry.Name; }
+  const o = oi.own.find(x => 'V' + x.voucher === v); if (o) { $('#mvAmount').value = o.outstanding.toFixed(2); $('#mvName').value = ownerOf(o); }
+});
+/** Who paid with their own card: the person who captured the slip, else the person using the app. */
+function ownerOf(o) {
+  const e = S.entries.find(x => x.Kind === 'SLIP' && x.Voucher === o.voucher);
+  return (e && e.By) || (S.user && S.user.name) || '';
+}
+function renderMoveThumb() { $('#mvThumb').innerHTML = S.photo ? '<img src="' + S.photo + '" alt="proof">' : '<div class="none">no proof</div>'; }
+$('#mvSnap').onclick = () => pickPhoto('move', true);
+$('#mvGal').onclick = () => pickPhoto('move', false);
+$('#mvClear').onclick = () => { S.photo = ''; renderMoveThumb(); };
+$('#mvCancel').onclick = () => { S.photo = ''; show('home'); };
+$('#hIn').onclick = () => openMove('IN');
+$('#hOut').onclick = () => openMove('OUT');
+$('#mvSave').onclick = async () => {
+  const type = chipVal('mtype'); if (!type) return toast('Pick a type', true);
+  const swipes = type === 'KITCHEN_SALES' ? (parseMoney($('#mvSwipes').value) || 0) : 0;
+  const amount = parseMoney($('#mvAmount').value) || 0;
+  if (!(amount > 0) && !(type === 'KITCHEN_SALES' && swipes > 0)) return toast('Enter the amount', true);
+  let note = $('#mvNote').value.trim();
+  if (swipes > 0 && !/swipes?/i.test(note)) note = ('Swipes R' + r2(swipes) + ' ' + note).trim();
+  const side = type === 'CASH_EXCHANGE' ? 'BANK' : chipVal('mside'); if (!side) return toast('Pick cash box or bank', true);
+  const name = $('#mvName').value.trim();
+  if (type === 'STAFF_WITHDRAWAL' && !name) return toast('Who took the cash?', true);
+  if (type === 'REIMBURSE' && !$('#mvLink').value) return toast('Pick the own-card slip being reimbursed', true);
+  busy('Saving');
+  try {
+    const d = await api(S.move === 'IN' ? 'saveIn' : 'saveOut', {
+      date: $('#mvDate').value || todayISO(), type, name, amount, side, direction: chipVal('mdir'),
+      alloc: chipVal('malloc'), note, linkId: $('#mvLinkBox').hidden ? '' : $('#mvLink').value,
+      image: S.photo ? S.photo.split(',')[1] : ''
+    });
+    S.entries.push(...d.entries); S.photo = '';
+    S.month = d.entries[0].ReconMonth;
+    show('home'); toast('Saved · ' + TYPE_LABEL[type] + ' ' + R(amount));
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+
+/* ---------- photo shortcuts ---------- */
+$('#hSnap').onclick = () => { S.slipOpen = false; S.photo = ''; pickPhoto('slip', true); };
+$('#hGallery').onclick = () => { S.slipOpen = false; S.photo = ''; pickPhoto('slip', false); };
+
+/* ---------- month ---------- */
+function renderMonth() {
+  const s = summary(S.entries, S.months, S.month), rec = findMonth(S.months, S.month) || {};
+  const prevName = monthName(addMonth(S.month, -1));
+  $('#moOB').value = has(rec.OpenBank) ? num(rec.OpenBank).toFixed(2) : '';
+  $('#moOC').value = has(rec.OpenCash) ? num(rec.OpenCash).toFixed(2) : '';
+  $('#moOB').placeholder = s.open.bankFrom === 'prev' ? s.open.openBank.toFixed(2) + ' (from ' + prevName + ')' : '0.00';
+  $('#moOC').placeholder = s.open.cashFrom === 'prev' ? s.open.openCash.toFixed(2) + ' (from ' + prevName + ')' : '0.00';
+  $('#moSC').value = has(rec.StmtClose) ? num(rec.StmtClose).toFixed(2) : '';
+  $('#moCC').value = has(rec.CashCount) ? num(rec.CashCount).toFixed(2) : '';
+  $('#moHint').textContent = 'Leave an opening field empty to carry ' + prevName + "'s statement closing / cash count forward.";
+  const inc = s.bankIn + s.cashIn, exp = s.bankOut + s.cashOut;
+  const rows = [
+    ['Opening bank', s.open.openBank], ['Plus bank in', s.bankIn], ['Less bank out', -s.bankOut], ['Expected bank', s.expBank, 'tot'], ['Statement closing', s.stmtClose], ['Bank difference', s.bankDiff, 'd'],
+    ['', ''],
+    ['Opening cash on hand', s.open.openCash], ['Plus cash in', s.cashIn], ['Less cash out', -s.cashOut], ['Expected cash', s.expCash, 'tot'], ['Cash count', s.cashCount], ['Cash difference', s.cashDiff, 'd'],
+    ['', ''],
+    ['Total income', inc], ['Total expenditure', exp],
+    ...(pcCf() ? [['PC (incl VAT)', s.pc], ['CF 6300 (incl VAT)', s.cf]] : Object.keys(s.byAlloc).map(k => [k + ' (incl VAT)', s.byAlloc[k].amount])),
+    ['Input VAT', s.vat],
+    ['DIFFERENCE', s.diff, 'd tot']
+  ];
+  $('#moTbl').innerHTML = rows.map(r => {
+    if (r[0] === '') return '<tr><td colspan="2" style="border:0;height:8px"></td></tr>';
+    const cls = (r[2] || '').includes('d') && r[1] !== null ? (r[1] === 0 ? 'ok' : 'bad') : '';
+    return '<tr class="' + ((r[2] || '').includes('tot') ? 'tot' : '') + '"><td>' + esc(r[0]) + '</td><td class="' + cls + '">' + (r[1] === null ? '–' : R(r[1])) + '</td></tr>';
+  }).join('');
+  const bank = s.rows.filter(isBankSide);
+  $('#moChk').innerHTML = bank.length ? bank.map(e => '<label class="chk"><input type="checkbox" data-id="' + esc(e.ID) + '"' + (e.OnStatement === 'Y' ? ' checked' : '') + '><div class="m"><b>' + esc(e.Name || TYPE_LABEL[e.Type]) + '</b><div class="note" style="margin:0">' + esc(e.Date) + (e.Voucher ? ' · V' + esc(e.Voucher) : '') + ' · ' + esc(e.Kind === 'SLIP' ? 'Card' : TYPE_LABEL[e.Type]) + '</div></div><b>' + (effect(e).bank > 0 ? '+' : '−') + R(Math.abs(effect(e).bank)) + '</b></label>').join('') : '<p class="mute">No bank lines this month yet.</p>';
+  const other = groupForMove(s.rows.filter(e => !isBankSide(e)));
+  $('#moCash').innerHTML = other.length ? other.map(g => '<label class="chk"><input type="checkbox" data-ids="' + esc(g.ids.join(',')) + '"><div class="m"><b>' + esc(g.name) + '</b><div class="note" style="margin:0">' + esc(g.date) + (g.voucher ? ' · V' + esc(g.voucher) : '') + ' · ' + esc(g.label) + (g.ids.length > 1 ? ' · ' + g.ids.length + ' lines' : '') + '</div></div><b>' + R(g.amount) + '</b></label>').join('') : '<p class="mute">No cash or other entries this month.</p>';
+  const mrec = findMonth(S.months, S.month);
+  $('#moPdfLink').innerHTML = mrec && mrec.PdfUrl ? '<a href="' + esc(mrec.PdfUrl) + '" target="_blank" rel="noopener">Open last PDF</a>' : '';
+  $('#moOut').hidden = true;
+  renderPack();
+}
+$('#moChk').addEventListener('change', async e => {
+  const cb = e.target.closest('input[type=checkbox]'); if (!cb) return;
+  const id = cb.dataset.id, v = cb.checked ? 'Y' : '';
+  const en = S.entries.find(x => x.ID === id); if (en) en.OnStatement = v;
+  try { await api('update', { id, fields: { OnStatement: v } }); }
+  catch (err) { toast(err.message, true); cb.checked = !cb.checked; if (en) en.OnStatement = cb.checked ? 'Y' : ''; }
+});
+$('#moMove').onclick = async () => {
+  const s = summary(S.entries, S.months, S.month);
+  const un = s.rows.filter(e => isBankSide(e) && e.OnStatement !== 'Y');
+  if (!un.length) return toast('Everything is ticked – nothing to move');
+  const next = addMonth(S.month, 1);
+  busy('Moving ' + un.length + ' to ' + monthName(next));
+  try {
+    const d = await api('bulkUpdate', { updates: un.map(e => ({ id: e.ID, fields: { ReconMonth: next, OnStatement: '' } })) });
+    S.entries = d.entries; renderMonth(); toast(un.length + ' moved to ' + monthName(next));
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+/** Group non-bank entries for moving: lines of one slip (same voucher) stay together. */
+function groupForMove(list) {
+  const out = [], byV = {};
+  list.forEach(e => {
+    if (e.Kind === 'SLIP' && e.Voucher) {
+      let g = byV[e.Voucher];
+      if (!g) { g = byV[e.Voucher] = { ids: [], name: e.Name, date: e.Date, voucher: e.Voucher, amount: 0, label: 'Slip · ' + (SIDE_LABEL[e.Side] || e.Side) }; out.push(g); }
+      g.ids.push(e.ID); g.amount = r2(g.amount + num(e.Amount));
+    } else {
+      out.push({ ids: [e.ID], name: e.Name || TYPE_LABEL[e.Type], date: e.Date, voucher: e.Voucher, amount: num(e.Amount), label: (TYPE_LABEL[e.Type] || e.Type) + ' · ' + (SIDE_LABEL[e.Side] || e.Side) });
+    }
+  });
+  return out;
+}
+$('#moCashMove').onclick = async () => {
+  const ids = [...document.querySelectorAll('#moCash input[type=checkbox]:checked')].flatMap(cb => cb.dataset.ids.split(',').filter(Boolean));
+  if (!ids.length) return toast('Tick what belongs to next month first');
+  const next = addMonth(S.month, 1);
+  busy('Moving to ' + monthName(next));
+  try {
+    const d = await api('bulkUpdate', { updates: ids.map(id => ({ id, fields: { ReconMonth: next } })) });
+    S.entries = d.entries; renderMonth(); toast('Moved to ' + monthName(next));
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+
+/* ---------- month-end pack (finance Excel) ---------- */
+const DENOM_LABEL = d => d >= 1 ? 'R' + d : (d * 100) + 'c';
+const countKey = m => 'pcst.count.' + S.station + '.' + m;
+function loadCounts(m) { try { return JSON.parse(localStorage.getItem(countKey(m)) || '{}') || {}; } catch (e) { return {}; } }
+function storeCounts(m, c) { try { localStorage.setItem(countKey(m), JSON.stringify(c)); } catch (e) { /* storage off: count still saves as a total */ } }
+function readCounts() {
+  const c = {};
+  $$('#pkCount input[data-d]').forEach(i => { const n = parseInt(i.value, 10); if (n > 0) c[i.dataset.d] = n; });
+  return c;
+}
+function packBalances(s, countTotal) {
+  return { openBank: s.open.openBank, openCash: s.open.openCash, stmtClose: s.stmtClose, cashCount: countTotal > 0 ? countTotal : s.cashCount };
+}
+function renderPack() {
+  if (!window.PCashPack) { $('#pkCheck').innerHTML = '<p class="mute">Pack tools not loaded – check your connection and reload.</p>'; return; }
+  const P = window.PCashPack, counts = loadCounts(S.month);
+  $('#pkCount').innerHTML = '<tr><td><b>Note / coin</b></td><td style="text-align:center"><b>Count</b></td><td><b>Total</b></td></tr>' +
+    P.DENOMS.map(d => '<tr><td>' + DENOM_LABEL(d) + '</td><td style="text-align:center"><input data-d="' + d + '" type="text" inputmode="numeric" style="width:90px;padding:6px;font-size:16px;text-align:center" value="' + (counts[String(d)] || '') + '"></td><td data-t="' + d + '"></td></tr>').join('') +
+    '<tr class="tot"><td>Cash on hand</td><td></td><td id="pkCountTot"></td></tr>';
+  updateCountTotals();
+  renderPackCheck();
+  $('#pkShare').hidden = true; $('#pkMsg').textContent = '';
+}
+function updateCountTotals() {
+  const c = readCounts();
+  window.PCashPack.DENOMS.forEach(d => { const cell = document.querySelector('#pkCount td[data-t="' + d + '"]'); if (cell) cell.textContent = R(r2(d * (c[String(d)] || 0))); });
+  $('#pkCountTot').textContent = R(window.PCashPack.countTotal(c));
+}
+function renderPackCheck() {
+  const P = window.PCashPack, s = summary(S.entries, S.months, S.month);
+  const pack = P.build(S.entries, S.month, packBalances(s, P.countTotal(readCounts())));
+  const R0 = pack.recon, w = [];
+  const live = s.rows;
+  const unticked = live.filter(e => isBankSide(e) && e.OnStatement !== 'Y').length;
+  if (unticked) w.push(unticked + ' bank line(s) not ticked in Statement check.');
+  const noSwipe = live.filter(e => e.Type === 'KITCHEN_SALES' && !P.swipesFromNote(e.Note)).length;
+  if (noSwipe) w.push(noSwipe + ' kitchen sales form(s) without a card-machine (swipes) figure.');
+  if (R0.bankClose === null) w.push('Statement closing balance not entered (Balances card).');
+  if (R0.cashClose === null) w.push('Cash not counted yet.');
+  if (R0.openBank === null || R0.openCash === null) w.push('Opening bank / cash missing.');
+  if (pack.expenses.length > 78) w.push('More than 78 voucher lines – the form only has 78 rows.');
+  const row = (a, b, cls) => '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + a + '</td><td>' + b + '</td></tr>';
+  const diff = R0.difference;
+  $('#pkCheck').innerHTML = '<table class="tbl">' +
+    row('Voucher lines', pack.expenses.length + ' (' + (pack.expenses.length ? pack.expenses[pack.expenses.length - 1].voucher : 0) + ' vouchers)') +
+    row('Income lines', String(pack.income.length)) +
+    row('Expenditure (cash + swipes)', R(R0.expenditure)) +
+    row('Income (cash + EFT)', R(R0.income)) +
+    row('EFT purchases (main acc)', R(pack.expTotals.eft)) +
+    row('Input VAT', R(pack.expTotals.vat)) +
+    row('CF expense / PC expense', R(pack.summary.expCF) + ' / ' + R(pack.summary.expPC)) +
+    row('DIFFERENCE recon vs actual', diff === null ? '–' : '<span class="' + (Math.abs(diff) < 0.05 ? 'ok' : 'bad') + '">' + R(diff) + '</span>', 'tot') +
+    '</table>' + (w.length ? '<p class="note" style="color:var(--warn)">⚠ ' + w.map(esc).join('<br>⚠ ') + '</p>' : '<p class="note" style="color:var(--ok)">✓ Ready to build.</p>');
+}
+$('#pkCount').addEventListener('input', () => { updateCountTotals(); renderPackCheck(); });
+$('#pkSaveCount').onclick = async () => {
+  const c = readCounts(), tot = window.PCashPack.countTotal(c);
+  if (!(tot > 0)) return toast('Enter the count first', true);
+  storeCounts(S.month, c);
+  busy('Saving cash count');
+  try {
+    const d = await api('setMonth', { month: S.month, cashCount: tot });
+    S.months = d.months; renderMonth(); toast('Cash count saved · ' + R(tot));
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+let lastPack = null;
+$('#pkBuild').onclick = async () => {
+  if (!window.ExcelJS || !window.PCashFill) return toast('Excel tools still loading – try again in a moment', true);
+  const counts = readCounts(); storeCounts(S.month, counts);
+  const s = summary(S.entries, S.months, S.month);
+  const pack = window.PCashPack.build(S.entries, S.month, packBalances(s, window.PCashPack.countTotal(counts)));
+  busy('Building ' + monthName(S.month) + ' pack');
+  try {
+    const res = await fetch('template.xlsx', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('Template not found (template.xlsx)');
+    const wb = new ExcelJS.Workbook();
+    await wb.xlsx.load(await res.arrayBuffer());
+    const warn = window.PCashFill.fill(wb, pack, counts);
+    const buf = await wb.xlsx.writeBuffer();
+    const name = window.PCashFill.fileName(S.month);
+    const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    lastPack = new File([blob], name, { type: blob.type });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    $('#pkShare').hidden = !(navigator.canShare && navigator.canShare({ files: [lastPack] }));
+    $('#pkMsg').textContent = 'Downloaded ' + name + '.' + (warn.length ? ' Note: ' + warn.join(' ') : '');
+    toast('Pack built · ' + name);
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+$('#pkShare').onclick = async () => {
+  if (!lastPack) return;
+  try { await navigator.share({ files: [lastPack], title: lastPack.name }); } catch (e) { /* user closed the share sheet */ }
+};
+$('#moSave').onclick = async () => {
+  const val = id => { const t = $(id).value.trim(); if (t === '') return ''; const n = parseMoney(t); if (!isFinite(n)) throw new Error('Check the amounts'); return n; };
+  busy('Saving balances');
+  try {
+    const d = await api('setMonth', { month: S.month, openBank: val('#moOB'), openCash: val('#moOC'), stmtClose: val('#moSC'), cashCount: val('#moCC') });
+    S.months = d.months; renderMonth(); toast('Balances saved');
+  } catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+$('#moCopy').onclick = async () => {
+  const txt = buildExport(S.entries, S.months, S.month, S.comma, { name: curStation().Name, cats: cats() });
+  const ta = $('#moOut'); ta.value = txt; ta.hidden = false;
+  try { await navigator.clipboard.writeText(txt); toast('Copied – paste into Excel'); }
+  catch (e) { ta.focus(); ta.select(); try { document.execCommand('copy'); toast('Copied – paste into Excel'); } catch (e2) { toast('Select the text below and copy it', true); } }
+};
+$('#moPdf').onclick = async () => {
+  busy('Building PDF (can take a minute)');
+  try { const d = await api('buildPdf', { month: S.month }); S.months = d.months; renderMonth(); toast('PDF ready · ' + d.count + ' documents'); }
+  catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+
+/* ---------- open items ---------- */
+function renderOpen() {
+  const oi = openItems(S.entries);
+  $('#opW').innerHTML = oi.withdrawals.length ? oi.withdrawals.map(o => '<div class="it"><div class="m"><div class="n">' + esc(o.entry.Name) + '</div><div class="s">Took ' + R(num(o.entry.Amount)) + ' on ' + esc(o.entry.Date) + (o.paid ? ' · repaid ' + R(o.paid) : '') + '</div></div><div><div class="a bad">' + R(o.outstanding) + '</div><button class="btn sm" data-repay="' + esc(o.entry.ID) + '">Repaid</button></div></div>').join('') : '<p class="mute">Nobody owes the cash box. 👍</p>';
+  $('#opO').innerHTML = oi.own.length ? oi.own.map(o => '<div class="it"><div class="m"><div class="n">V' + esc(o.voucher) + ' · ' + esc(o.name) + '</div><div class="s">' + esc(o.date) + ' · slip ' + R(o.total) + '</div></div><div><div class="a warn">' + R(o.outstanding) + '</div><button class="btn sm" data-reimb="V' + esc(o.voucher) + '">Reimburse</button></div></div>').join('') : '<p class="mute">Nothing owed to you.</p>';
+}
+$('#v-open').addEventListener('click', e => {
+  const a = e.target.closest('[data-repay]'), b = e.target.closest('[data-reimb]');
+  const oi = openItems(S.entries);
+  if (a) { const o = oi.withdrawals.find(x => x.entry.ID === a.dataset.repay); openMove('IN', { type: 'REPAYMENT', amount: o.outstanding, name: o.entry.Name }); syncMove(); $('#mvLink').value = o.entry.ID; }
+  if (b) { const o = oi.own.find(x => 'V' + x.voucher === b.dataset.reimb); openMove('OUT', { type: 'REIMBURSE', amount: o.outstanding, name: ownerOf(o) }); syncMove(); $('#mvLink').value = b.dataset.reimb; }
+});
+
+/* ---------- edit ---------- */
+function openEdit(id) {
+  const e = S.entries.find(x => x.ID === id); if (!e) return;
+  S.editId = id;
+  $('#edTitle').textContent = (e.Voucher ? 'V' + e.Voucher + (e.Line ? '.' + e.Line : '') + ' · ' : '') + (e.Kind === 'SLIP' ? 'Slip' : TYPE_LABEL[e.Type]);
+  const sides = e.Kind === 'SLIP' ? ['CARD', 'CASH', 'OWN', 'EFT'] : ['CASH', 'BANK'];
+  let h = '';
+  if (e.FileUrl) h += '<p><a href="' + esc(e.FileUrl) + '" target="_blank" rel="noopener">📄 Open photo in Drive</a></p>';
+  h += '<div class="split2"><div><label>Date</label><input id="edDate" type="date" value="' + esc(e.Date) + '"></div><div><label>Name / vendor</label><input id="edName" type="text" value="' + esc(e.Name) + '"></div></div>';
+  if (e.Kind === 'SLIP') h += '<label>Goes to</label><div class="chips" data-name="edAlloc">' + catChips(cats().indexOf(e.Alloc) < 0 && e.Alloc ? cats().concat([e.Alloc]) : cats()) + '</div>';
+  if (e.By) h += '<p class="note">Captured by ' + esc(e.By) + '</p>';
+  h += '<div class="split2"><div><label>Amount</label><input id="edAmt" class="money" type="text" inputmode="decimal" value="' + num(e.Amount).toFixed(2) + '"></div>';
+  h += e.Kind === 'SLIP' ? '<div><label>VAT</label><div class="inl"><input id="edVat" type="text" inputmode="decimal" value="' + num(e.VAT).toFixed(2) + '"><button class="btn alt sm" data-vat="edVat:edAmt">15%</button></div></div></div>' : '<div></div></div>';
+  if (e.Type !== 'CASH_EXCHANGE') h += '<label>' + (e.Kind === 'SLIP' ? 'Paid by' : 'Cash box or bank') + '</label><div class="chips" data-name="edSide">' + sides.map(s => '<button data-v="' + s + '">' + (SIDE_LABEL[s] || s) + (s === 'CASH' && e.Kind !== 'SLIP' ? ' box' : '') + '</button>').join('') + '</div>';
+  h += '<label>Counts in month (statement month)</label><input id="edRM" type="month" value="' + esc(e.ReconMonth) + '">';
+  h += '<label>Note</label><input id="edNote" type="text" value="' + esc(e.Note) + '">';
+  if (e.Status === 'VOID') h += '<p class="bad"><b>This entry is VOID.</b></p>';
+  $('#edBody').innerHTML = h;
+  if (e.Kind === 'SLIP') setChip('edAlloc', e.Alloc);
+  setChip('edSide', e.Side);
+  $('#edVoid').hidden = e.Status === 'VOID';
+  show('edit');
+}
+$('#edCancel').onclick = () => show('home');
+$('#edSave').onclick = async () => {
+  const e = S.entries.find(x => x.ID === S.editId); if (!e) return;
+  const amt = parseMoney($('#edAmt').value); if (!(amt > 0)) return toast('Amount must be more than 0', true);
+  const fields = { Date: $('#edDate').value, Name: $('#edName').value.trim(), Amount: amt, ReconMonth: $('#edRM').value || e.ReconMonth, Note: $('#edNote').value.trim() };
+  if (e.Kind === 'SLIP') {
+    const vat = parseMoney($('#edVat').value) || 0; if (vat < 0 || vat >= amt) return toast('VAT must be less than the amount', true);
+    fields.VAT = vat; fields.Alloc = chipVal('edAlloc') || e.Alloc;
+  }
+  if (e.Type !== 'CASH_EXCHANGE') fields.Side = chipVal('edSide') || e.Side;
+  busy('Saving');
+  try { const d = await api('update', { id: e.ID, fields }); S.entries = d.entries; show('home'); toast('Updated'); }
+  catch (err) { toast(err.message, true); }
+  finally { unbusy(); }
+};
+$('#edVoid').onclick = async () => {
+  if ($('#edVoid').dataset.sure !== '1') { $('#edVoid').dataset.sure = '1'; $('#edVoid').textContent = 'Tap again to void'; setTimeout(() => { $('#edVoid').dataset.sure = ''; $('#edVoid').textContent = 'Void this entry'; }, 4000); return; }
+  $('#edVoid').dataset.sure = ''; $('#edVoid').textContent = 'Void this entry';
+  busy('Voiding');
+  try { const d = await api('voidEntry', { id: S.editId }); S.entries = d.entries; show('home'); toast('Voided'); }
+  catch (err) { toast(err.message, true); }
+  finally { unbusy(); }
+};
+
+/* ---------- settings ---------- */
+function renderSettings() {
+  $('#stApi').value = S.api; $('#stComma').checked = S.comma; $('#stPin').value = '';
+  $('#stWho').innerHTML = S.user ? 'Signed in as <b>' + esc(S.user.name) + '</b> · ' + (S.user.station === 'ALL' ? 'all stations' : esc(curStation().Name)) + ' · ' + (S.user.role === 'ADMIN' ? 'admin' : 'station manager') : '';
+}
+$('#stApiSave').onclick = () => { S.api = $('#stApi').value.trim(); store.set('api', S.api); toast('URL saved'); };
+$('#stComma').onchange = () => { S.comma = $('#stComma').checked; store.set('comma', S.comma ? '1' : '0'); };
+$('#stPinGo').onclick = async () => {
+  const p = $('#stPin').value.trim(); if (!/^\d{4,8}$/.test(p)) return toast('PIN must be 4 to 8 digits', true);
+  busy('Changing PIN');
+  try { await api('changePin', { newPin: p }); S.pin = p; store.set('pin', p); toast('PIN changed'); $('#stPin').value = ''; }
+  catch (e) { toast(e.message, true); }
+  finally { unbusy(); }
+};
+$('#stReload').onclick = async () => { try { await loadAll(); show('home'); toast('Up to date'); } catch (e) { toast(e.message, true); } };
+$('#stLock').onclick = () => { store.del('pin'); S.pin = ''; S.user = null; S.entries = []; S.months = []; show('lock'); };
+document.querySelector('.chips[data-name="malloc"]').dataset.toggle = '1'; // tap again to clear
+$('#stApiSave').addEventListener('click', () => { if (!S.pin) setTimeout(() => show('lock'), 600); });
+
+/* ---------- start ---------- */
+window.addEventListener('resize', () => { if (S.view === 'crop' && C.src) drawCrop(); });
+(async function start() {
+  if (!/^https:\/\/script\.google\.com\//.test(S.api)) {
+    try { const c = await (await fetch('config.json', { cache: 'no-store' })).json(); if (c && c.api) S.api = c.api; } catch (e) { }
+  }
+  document.addEventListener('click', e => { if (e.target.id === 'goSet') { e.preventDefault(); show('settings'); } });
+  if (S.pin && /^https:\/\/script\.google\.com\//.test(S.api)) {
+    try { await loadAll('Loading'); show('home'); return; }
+    catch (e) { toast(e.message, true); if (/PIN/.test(e.message)) store.del('pin'); }
+  }
+  show('lock');
+})();
+</script>
+</body>
+</html>
